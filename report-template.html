@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>person-brief · {{person_name}}</title>
+<style>
+  :root{
+    --green:#1E4B3C;    /* 主色 墨绿 */
+    --teal:#3E7A64;     /* 次色 */
+    --sand:#C47A2B;     /* 点缀 沙金 */
+    --ink:#22302A;      /* 正文 */
+    --sub:#6B7A73;      /* 次要文字 */
+    --line:#E3EAE5;     /* 分隔线 */
+    --red:#B5402E;      /* 避雷 */
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;font-size:15px;line-height:1.75;color:var(--ink);background:#fff;}
+  .wrap{max-width:880px;margin:0 auto;padding:0 56px 64px;background:#fff;}
+
+  /* ========== 页眉 ========== */
+  .head{border-bottom:3px solid var(--green);padding:38px 0 22px;position:relative;}
+  .head::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;
+    background:linear-gradient(90deg,var(--green) 0 30%,var(--sand) 30% 100%);}
+  .brand{font-size:12px;letter-spacing:.3em;color:var(--sand);font-weight:800;text-transform:uppercase;}
+  .head h1{font-size:34px;font-weight:800;color:var(--green);margin:10px 0 6px;letter-spacing:.02em;line-height:1.3;}
+  .head .sub{font-size:16px;color:var(--ink);}
+  .head .sub b{color:var(--green);}
+  .head .oneliner{font-size:14px;color:var(--sub);margin-top:6px;}
+  .head .meta{font-size:13px;color:var(--sub);margin-top:14px;display:flex;flex-wrap:wrap;gap:6px 20px;align-items:center;}
+  .head .meta span{display:inline-flex;align-items:center;gap:7px;}
+  .head .meta .dot{width:5px;height:5px;border-radius:50%;background:var(--sand);display:inline-block;}
+  .level{display:inline-block;background:var(--green);color:#fff;font-size:12.5px;font-weight:700;
+    padding:3px 14px;border-radius:14px;letter-spacing:.04em;}
+
+  /* ========== 章节标题 ========== */
+  .sec{margin:36px 0 0;}
+  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .sec-head .no{width:34px;height:34px;background:var(--green);color:#fff;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;}
+  .sec-head h2{font-size:19px;font-weight:800;color:var(--green);letter-spacing:.01em;}
+  .sec-head .line{flex:1;height:1px;background:var(--line);}
+
+  /* ========== 破冰抓手（引语卡） ========== */
+  .ice{border:1px solid var(--line);border-radius:12px;padding:22px 26px;margin:28px 0 6px;
+    background:#FBFCFA;box-shadow:0 1px 4px rgba(30,75,60,.06);position:relative;}
+  .ice::before{content:"“";position:absolute;top:2px;left:16px;font-size:56px;line-height:1;
+    color:var(--sand);font-family:Georgia,serif;opacity:.5;}
+  .ice .itag{display:inline-block;background:var(--sand);color:#fff;font-size:12.5px;font-weight:700;
+    padding:3px 14px;border-radius:14px;letter-spacing:.08em;margin-bottom:12px;}
+  .ice .q{font-size:16px;color:var(--ink);padding-left:8px;}
+
+  /* ========== 表格（带表头） ========== */
+  table{width:100%;border-collapse:collapse;margin:4px 0 10px;font-size:14.5px;}
+  thead th{background:var(--green);color:#fff;font-size:13.5px;font-weight:700;text-align:left;
+    padding:10px 16px;letter-spacing:.06em;}
+  thead th:first-child{border-radius:8px 0 0 0;}
+  thead th:last-child{border-radius:0 8px 0 0;}
+  tbody td{padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#F4F8F5;}
+  td.lb{width:110px;font-weight:700;color:var(--green);white-space:nowrap;}
+  td.src{width:170px;text-align:right;}
+
+  /* ========== 来源链接 ========== */
+  .src{display:inline;}
+  a.srclink{display:inline-block;background:#EDF3EF;color:var(--teal);font-size:12.5px;font-weight:600;
+    padding:3px 12px;border-radius:14px;text-decoration:none;border:1px solid #D8E4DC;white-space:nowrap;margin-top:4px;line-height:1.6;}
+  a.srclink:hover{background:var(--green);color:#fff;}
+
+  /* ========== 背景轨迹（时间轴） ========== */
+  .timeline{position:relative;padding-left:30px;margin:8px 0 6px;}
+  .timeline::before{content:"";position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:#CFE0D6;}
+  .tl-item{position:relative;margin-bottom:16px;padding:12px 18px;border:1px solid var(--line);
+    border-radius:8px;background:#fff;font-size:14.5px;}
+  .tl-item::before{content:"";position:absolute;left:-26px;top:17px;width:11px;height:11px;border-radius:50%;
+    background:var(--sand);box-shadow:0 0 0 3px #F0E7D8;}
+  .tl-item .y{display:inline-block;background:var(--green);color:#fff;font-size:12px;font-weight:700;
+    padding:1px 10px;border-radius:10px;margin-right:8px;letter-spacing:.02em;}
+  .tl-item .d{color:var(--ink);}
+
+  /* ========== 双声道 ========== */
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:4px 0 16px;}
+  .duo .col{border:1px solid var(--line);border-radius:10px;padding:16px 18px;background:#fff;}
+  .duo .col.self{border-top:4px solid var(--green);}
+  .duo .col.media{border-top:4px solid var(--sand);}
+  .duo h4{font-size:14.5px;font-weight:800;margin-bottom:8px;}
+  .duo .col.self h4{color:var(--green);}
+  .duo .col.media h4{color:var(--sand);}
+  .duo ul{list-style:none;}
+  .duo li{padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px;line-height:1.7;}
+  .duo li:last-child{border-bottom:none;}
+  .duo li .s{font-size:0;}
+  .gap{border:1px dashed var(--teal);border-radius:8px;background:#F4F8F5;padding:13px 18px;
+    font-size:14.5px;margin-bottom:8px;}
+  .gap b{color:var(--green);font-weight:800;}
+  .gap .t{font-size:13px;font-weight:800;color:var(--teal);margin-bottom:3px;}
+
+  /* ========== 谈资 ========== */
+  .hook{display:flex;gap:14px;border:1px solid var(--line);border-radius:8px;padding:13px 18px;
+    margin-bottom:12px;background:#fff;font-size:14.5px;}
+  .hook .n{width:28px;height:28px;border-radius:50%;background:var(--sand);color:#fff;font-weight:800;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13.5px;margin-top:2px;}
+  .hook .body{flex:1;}
+  .hook .body .src{display:block;}
+
+  /* ========== 避雷 ========== */
+  .avoid{border:1px solid #F0DCD7;border-left:4px solid var(--red);border-radius:8px;
+    padding:14px 18px;background:#FEFAF8;font-size:14.5px;}
+  .avoid .t{font-size:13.5px;font-weight:800;color:var(--red);margin-bottom:4px;}
+  .avoid b{color:var(--ink);}
+
+  /* ========== 社交账号表 ========== */
+  .sm .btn{display:inline-block;background:var(--teal);color:#fff;font-size:12.5px;font-weight:600;
+    padding:4px 14px;border-radius:14px;text-decoration:none;line-height:1.6;}
+  .sm .btn:hover{background:var(--green);}
+  .sm .uname{font-weight:700;color:var(--ink);}
+  .sm .fans{color:var(--sub);font-size:13px;margin-left:6px;}
+  .hint{font-size:12.5px;color:var(--sub);line-height:1.8;margin:4px 0 12px;}
+
+  /* ========== 附录 ========== */
+  .appendix{margin-top:44px;border-top:3px solid var(--green);padding-top:22px;}
+  .appendix .note{border:1px solid var(--line);border-left:4px solid var(--sand);border-radius:8px;
+    padding:14px 18px;margin-bottom:12px;background:#fff;font-size:14.5px;}
+  .appendix .note b{color:var(--green);}
+  .disclaimer{font-size:12.5px;color:var(--sub);border-top:1px dashed var(--line);
+    margin-top:18px;padding-top:12px;line-height:1.9;}
+
+  @media print{
+    body{background:#fff;}
+    .wrap{max-width:100%;padding:0;}
+    .sec{page-break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== 页眉 ===== -->
+  <div class="head">
+    <div class="brand">PERSON BRIEF</div>
+    <h1>{{person_name}}</h1>
+    <div class="sub"><b>{{company_name}}</b> · {{person_role}}</div>
+    <div class="oneliner">{{person_one_liner}}</div>
+    <div class="meta">
+      <span class="level">定位层级：{{person_level}}</span>
+      <span><i class="dot"></i>{{report_date}}</span>
+      <span><i class="dot"></i>公开信息整理</span>
+      <span><i class="dot"></i>仅供会前参考</span>
+    </div>
+  </div>
+
+  <!-- ===== 🎯 破冰抓手 ===== -->
+  <div class="ice">
+    <span class="itag">🎯 破冰抓手</span>
+    <div class="q">{{ice_breaker}}</div>
+  </div>
+
+  <!-- ===== 01 身份与定位 ===== -->
+  <div class="sec">
+    <div class="sec-head"><span class="no">01</span><h2>身份与定位</h2><span class="line"></span></div>
+    <table>
+      <thead><tr><th>项目</th><th>内容</th><th>来源</th></tr></thead>
+      <tbody>
+        <tr><td class="lb">身份一句话</td><td>{{person_identity}}</td><td class="src">{{person_identity_src}}</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== 02 背景轨迹 ===== -->
+  <div class="sec">
+    <div class="sec-head"><span class="no">02</span><h2>背景轨迹</h2><span class="line"></span></div>
+    <div class="timeline">{{timeline_items}}</div>
+  </div>
+
+  <!-- ===== 03 双声道 ===== -->
+  <div class="sec">
+    <div class="sec-head"><span class="no">03</span><h2>双声道</h2><span class="line"></span></div>
+    <div class="duo">
+      <div class="col self"><h4>💬 他/她本人怎么说</h4><ul>{{self_items}}</ul></div>
+      <div class="col media"><h4>📰 外界怎么看</h4><ul>{{media_items}}</ul></div>
+    </div>
+    <div class="gap"><div class="t">Gap 解读</div><b>自我认知差</b>：{{gap_reading}} <span class="src">{{gap_src}}</span></div>
+  </div>
+
+  <!-- ===== 04 谈资与避雷 ===== -->
+  <div class="sec">
+    <div class="sec-head"><span class="no">04</span><h2>谈资与避雷</h2><span class="line"></span></div>
+    <div class="hook"><div class="n">①</div><div class="body">{{hook1}} <span class="src">{{hook1_src}}</span></div></div>
+    <div class="hook"><div class="n">②</div><div class="body">{{hook2}} <span class="src">{{hook2_src}}</span></div></div>
+    <div class="hook"><div class="n">③</div><div class="body">{{hook3}} <span class="src">{{hook3_src}}</span></div></div>
+    <div class="avoid"><div class="t">⛔ 避雷</div><b>别碰</b>：{{avoid}} <span class="src">{{avoid_src}}</span></div>
+  </div>
+
+  <!-- ===== 05 社交账号 ===== -->
+  <div class="sec">
+    <div class="sec-head"><span class="no">05</span><h2>社交账号</h2><span class="line"></span></div>
+    <table class="sm">
+      <thead><tr><th>平台</th><th>账号信息</th><th>操作</th></tr></thead>
+      <tbody>{{sm_rows}}</tbody>
+    </table>
+    <p class="hint">社交账号基于公开检索结果整理，受各平台可见性、登录墙与检索覆盖限制，账号无法保证收录完全，仅供会前参考；未检索到 ≠ 不存在。</p>
+  </div>
+
+  <!-- ===== 附录 ===== -->
+  <div class="appendix">
+    <div class="sec-head"><span class="no">附</span><h2>检索记录</h2><span class="line"></span></div>
+    <div class="note">
+      <b>已检索平台：</b>{{searched_platforms}}<br>
+      <b>未检索到平台：</b>{{not_found_platforms}}<br>
+      <b>检索记录：</b>{{search_log}}
+    </div>
+    <div class="disclaimer"><b>免责声明：</b>本简报仅基于公开职务信息与公开言论整理，不涉及个人隐私调查，仅供本次会前准备参考，不得对外分发。生成时间 {{report_date}}，请以当面沟通核实为准。未检索到 ≠ 该人物无相关信息。</div>
+  </div>
+
+</div>
+</body>
+</html>
